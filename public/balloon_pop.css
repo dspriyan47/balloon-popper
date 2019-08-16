@@ -1,0 +1,16 @@
+canvas {
+    border: 1px solid #d3d3d3;
+    background-color: #00aaff;
+    margin: 0px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+}
+
+html {
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
