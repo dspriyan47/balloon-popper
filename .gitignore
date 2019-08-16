@@ -68,4 +68,4 @@ node_modules/
 .env
 
 # firebase deploy config
-public/app/firebase.deploy.js
+public/firebase.deploy.js
