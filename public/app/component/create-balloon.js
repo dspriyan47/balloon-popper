@@ -22,7 +22,7 @@ CANVASBALLOON.GRADIENT_CIRCLE_RADIUS = 3;
  * @param	{Number}	radius				Radius of the balloon
  * @param	{String}	color				String representing the balloon's base color
  */
-CANVASBALLOON.Balloon = function (centerX, centerY, radius, color) {
+CANVASBALLOON.Balloon = function (centerX, centerY, radius, color, index=ID_NOT_SET) {
 
     this.centerX = centerX;
     this.centerY = centerY;
@@ -30,32 +30,38 @@ CANVASBALLOON.Balloon = function (centerX, centerY, radius, color) {
     this.darkColor = color.dark;
     this.lightColor = color.light;
     this.dependentBalloonAdded = false;
+    this.id = index;
 
-    this.newPos = function () {
-        this.centerY -= 2;
-        // if (this.centerY <= -80) {
-        //     this.centerY = window.innerHeight;
-        // }
+    this.newPos = function (decreaseFactor) {
+        this.centerY -= decreaseFactor;
     }
-    this.update = function () {
-        ctx = gameArea.context;
-        this.draw();
+    this.update = function (canvasContext, hitCanvasContext=false) {
+        ctx = canvasContext;
+        this.draw(canvasContext);
+        if(hitCanvasContext){
+            this.draw(hitCanvasContext, true);
+        }
     }
-    this.remove = function (balloonObj) {
-        ctx = gameArea.context;
-        this.radius = 0;
-        this.draw();
-    }
+}
+
+CANVASBALLOON.Balloon.prototype.drawCircle = function (canvasContext) {
+
+var ctx = canvasContext;
+ctx.fillStyle = "#3370d4"; //blue
+ctx.beginPath();
+ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
+ctx.closePath();
+ctx.fill();
 }
 
 /**
  * Draws the balloon on the canvas
  */
-CANVASBALLOON.Balloon.prototype.draw = function () {
+CANVASBALLOON.Balloon.prototype.draw = function (canvasContext, drawingHitContext=false) {
 
     // Prepare constants
 
-    var gfxContext = gameArea.context;
+    var gfxContext = canvasContext;
     var centerX = this.centerX;
     var centerY = this.centerY;
     var radius = this.radius;
@@ -122,16 +128,28 @@ CANVASBALLOON.Balloon.prototype.draw = function () {
 
     // Create balloon gradient
 
-    var gradientOffset = (radius / 3);
+    if(!drawingHitContext){
+        var gradientOffset = (radius / 3);
 
-    var balloonGradient =
-        gfxContext.createRadialGradient(centerX + gradientOffset, centerY - gradientOffset,
-            CANVASBALLOON.GRADIENT_CIRCLE_RADIUS,
-            centerX, centerY, radius + heightDiff);
-    balloonGradient.addColorStop(0, this.lightColor); //lightColor
-    balloonGradient.addColorStop(0.7, this.darkColor); //darkColor
-    gfxContext.fillStyle = balloonGradient;
-    gfxContext.fill();
+        var balloonGradient =
+            gfxContext.createRadialGradient(centerX + gradientOffset, centerY - gradientOffset,
+                CANVASBALLOON.GRADIENT_CIRCLE_RADIUS,
+                centerX, centerY, radius + heightDiff);
+        balloonGradient.addColorStop(0, this.lightColor); //lightColor
+        balloonGradient.addColorStop(0.7, this.darkColor); //darkColor
+        
+        gfxContext.fillStyle = balloonGradient;
+        gfxContext.fill();
+        
+        if(this.id != ID_NOT_SET){
+            gfxContext.font = '25px Comic Sans MS';
+            gfxContext.fillStyle = "red";
+            gfxContext.fillText(this.id, this.centerX, this.centerY); 
+        }
+    }else{
+        gfxContext.fillStyle = this.colorKey;
+        gfxContext.fill();
+    }
 
     // End balloon path
 

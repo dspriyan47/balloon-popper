@@ -1,7 +1,52 @@
-canvas {
+#canvas {
     border: 1px solid #d3d3d3;
     background-color: #00aaff;
+
+    background: red;
+    /* For Safari 5.1 to 6.0 */
+    background: -webkit-linear-gradient(#00aaff, #fff);
+    /* For Internet Explorer 10 */
+    background: -ms-linear-gradient(#00aaff, #fff);
+    /* Standard syntax */
+    background: linear-gradient(#00aaff, #fff);
     margin: 0px;
+
+    /* background: transparent; */
+    background: -webkit-linear-gradient(top, #00d2ff, #0080FF);
+
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
+}
+
+#bgCanvas {
+    background: -webkit-linear-gradient(top, #00d2ff, #0080FF);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+}
+
+#timer {
+    position: fixed; 
+    top:0px; 
+    right: 0px; 
+    background: transparent; 
+    font-family: 'Orbitron', sans-serif;
+    padding: 20px 15px 10px 10px;
+    font-size: 25px;
+    text-shadow: 1px 2px #00000050;
+    color: red;
+    font-weight: bold;
+    z-index: 11;
+}
+
+#scoreCanvas {
+    /* background: red; */
+    position: fixed;
+    top: 0px; 
+    left: 0px;
+    z-index: 10;
 }
 
 body {

@@ -26,7 +26,7 @@ var Particle = function (x, y, c) {
     // Color of the rock, given some randomness
     // this.c = colorVariation(colorPalette.matter[Math.floor(Math.random() * colorPalette.matter.length)],
     //     true);
-    this.c = c;
+    this.c = c+COLOR_ALPHA_LEVELS[30];
     // Speed of which the rock travels
     this.s = Math.pow(Math.ceil(Math.random() * config.maxSpeed), .7);
     // Direction the Rock flies
@@ -42,9 +42,11 @@ var updateParticleModel = function (p) {
         .sin(p.s);
     p.d > 90 && p.d < 270 ? p.y += p.s * Math.sin(a) / Math.sin(p.s) : p.y -= p.s * Math.sin(a) / Math.sin(p
         .s);
-    p.updateCounter++;      
-    const transparencyLevel = getColorTranparencyValue(p.updateCounter);
-    p.c = p.baseColor+transparencyLevel;
+    p.updateCounter++;   
+    p.r = p.r - 0.15;
+    p.r = (p.r <0 )?0:p.r; 
+    // const transparencyLevel = getColorTranparencyValue(p.updateCounter);
+    // p.c = p.baseColor;
     return p;
 };
 
@@ -66,9 +68,13 @@ var drawParticle = function (x, y, r, c) {
 // Remove particles that aren't on the canvas
 var cleanUpArray = function () {
     particles = particles.filter((p) => {
-        return (p.updateCounter < 70);
+        return (p.r != 0);
     });
 };
+
+var clearParticles = function () {
+    particles = [];
+}
 
 
 var initParticles = function (numParticles, x, y, color) {
@@ -98,5 +104,5 @@ var frame = function (ctx) {
         drawParticle(p.x, p.y, p.r, p.c);
     });
     // Play the same song? Ok!
-    window.requestAnimFrame(frame);
+    requestAnimationFrame(frame);
 };
